@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../index");
+const User = require("../models/User");
 const Organisation = require("../models/Organisation");
+const generateToken = require("../utils/generateToken");
 
 const register = async (req, res) => {
   const { firstName, lastName, email, password, phone } = req.body;
@@ -33,11 +34,9 @@ const register = async (req, res) => {
       creatorId: user.userId,
     });
 
-    await Organisation.addUserToOrganisation(user.userId, organisation.orgId);
+    const token = generateToken(user.userId, user.email); // Include email
 
-    const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    // await Organisation.addUserToOrganisation(user.userId, organisation.orgId);
 
     res.status(201).json({
       status: "success",
@@ -54,7 +53,7 @@ const register = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error during registration:", error);
     res.status(500).json({
       status: "error",
       message: "Internal server error",
@@ -63,14 +62,17 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  console.log("Login in progress");
   const { email, password } = req.body;
 
   try {
     const user = await User.findUserByEmail(email);
+    // console.log(user);
+    // console.log(email);
     if (!user) {
       return res.status(401).json({
         status: "error",
-        message: "Authentication failed",
+        message: "Authentication fbnailed",
       });
     }
 
@@ -92,15 +94,16 @@ const login = async (req, res) => {
       data: {
         accessToken: token,
         user: {
-          userId: user.userId,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          userId: user.userid,
+          firstName: user.firstname,
+          lastName: user.lastname,
           email: user.email,
           phone: user.phone,
         },
       },
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: "error",
       message: "Internal server error",
