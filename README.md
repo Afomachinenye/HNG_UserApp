@@ -15,7 +15,7 @@ PostgreSQL installed
 
 Installation
 Clone the repository:
-git clone https://github.com/your/repository.git
+git clone https://github.com/Afomachinenye/HNG_UserApp.git
 
 Install dependencies:
 npm install
