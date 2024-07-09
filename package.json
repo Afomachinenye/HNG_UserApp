@@ -10,7 +10,9 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testMatch": ["**/tests/**/*.{test,spec}.js"]
+    "testMatch": [
+      "**/tests/**/*.{test,spec}.js"
+    ]
   },
   "keywords": [],
   "author": "",
