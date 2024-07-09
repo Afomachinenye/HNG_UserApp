@@ -19,6 +19,13 @@ const register = async (req, res) => {
   }
 
   try {
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+      return res.status(422).json({
+        errors: [{ field: "email", message: "Email already exists" }],
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.createUser({
       firstName,
@@ -35,9 +42,6 @@ const register = async (req, res) => {
     });
 
     const token = generateToken(user.userid, user.email);
-    console.log(token);
-    console.log(user.userid);
-    console.log(organisation.orgid);
     await Organisation.addUserToOrganisation(user.userid, organisation.orgid);
 
     res.status(201).json({
@@ -56,21 +60,15 @@ const register = async (req, res) => {
     });
   } catch (error) {
     console.log("Error during registration:", error);
-    res.status(500).json({
-      status: "error",
-      message: "Internal server error",
-    });
+    res.status(500).json("Error during registration:", error);
   }
 };
 
 const login = async (req, res) => {
-  console.log("Login in progress");
   const { email, password } = req.body;
 
   try {
     const user = await User.findUserByEmail(email);
-    // console.log(user);
-    // console.log(email);
     if (!user) {
       return res.status(401).json({
         status: "error",

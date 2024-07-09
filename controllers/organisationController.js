@@ -28,7 +28,6 @@ const getOrganisation = async (req, res) => {
         message: "Organisation not found",
       });
     }
-    console.log({ organisation });
     res.status(200).json({
       status: "success",
       message: "Organisation retrieved successfully",
@@ -45,8 +44,6 @@ const getOrganisation = async (req, res) => {
 const createOrganisation = async (req, res) => {
   const userId = req.user.userId;
   const { name, description } = req.body;
-  console.log(req.user.userId);
-  console.log(name);
   try {
     if (!name) {
       return res.status(422).json({
