@@ -13,9 +13,9 @@ const authenticate = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // This should now include userId and email
-    console.log(req.user);
-    console.log("Decoded JWT:", req.user); // Debug log
+    req.user = decoded;
+    console.log(req.user.userid);
+    console.log("Decoded JWT:", req.user);
     next();
   } catch (ex) {
     res.status(400).json({

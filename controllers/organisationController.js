@@ -45,7 +45,7 @@ const getOrganisation = async (req, res) => {
 const createOrganisation = async (req, res) => {
   const userId = req.user.userId;
   const { name, description } = req.body;
-  console.log(req.user);
+  console.log(req.user.userId);
   console.log(name);
   try {
     if (!name) {

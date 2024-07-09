@@ -31,14 +31,14 @@ const register = async (req, res) => {
     const organisation = await Organisation.createOrganisation({
       name: `${firstName}'s Organisation`,
       description: `${firstName}'s default organisation`,
-      creatorId: user.userId,
+      creatorId: user.userid,
     });
 
-    const token = generateToken(user.userId, user.email);
+    const token = generateToken(user.userid, user.email);
     console.log(token);
-    console.log(user.userId);
-    console.log(organisation.orgId);
-    await Organisation.addUserToOrganisation(user.userId, organisation.orgId);
+    console.log(user.userid);
+    console.log(organisation.orgid);
+    await Organisation.addUserToOrganisation(user.userid, organisation.orgid);
 
     res.status(201).json({
       status: "success",
