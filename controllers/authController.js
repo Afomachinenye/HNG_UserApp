@@ -51,8 +51,8 @@ const register = async (req, res) => {
         accessToken: token,
         user: {
           userId: user.userId,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          firstName: user.firstname,
+          lastName: user.lastname,
           email: user.email,
           phone: user.phone,
         },
