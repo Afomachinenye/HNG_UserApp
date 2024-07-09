@@ -6,8 +6,6 @@ const userRoutes = require("./routes/userRoutes");
 const organisationRoutes = require("./routes/organisationRoutes");
 const dbPool = require("./db");
 
-// console.log("dbPool", dbPool);
-
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -17,7 +15,7 @@ app.use("/api", userRoutes);
 app.use("/api", organisationRoutes);
 
 app.get("/", (req, res) => {
-  res.json("Welcome, Postgres");
+  res.json("Welcome to my user_orgaisation app");
 });
 
 const PORT = process.env.PORT || 3000;

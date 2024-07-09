@@ -19,11 +19,11 @@ const register = async (req, res) => {
   }
 
   try {
-    const existingUser = await findUserByEmail(email);
+    const existingUser = await User.findUserByEmail(email);
     if (existingUser) {
-      return res.status(422).json({
-        errors: [{ field: "email", message: "Email already exists" }],
-      });
+      return res
+        .status(422)
+        .json({ errors: [{ message: "Email already exists" }] });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -60,7 +60,10 @@ const register = async (req, res) => {
     });
   } catch (error) {
     console.log("Error during registration:", error);
-    res.status(500).json("Error during registration:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
   }
 };
 
@@ -72,7 +75,7 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         status: "error",
-        message: "Authentication fbnailed",
+        message: "Authentication failed",
       });
     }
 

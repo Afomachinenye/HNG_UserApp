@@ -4,7 +4,6 @@ require("dotenv").config();
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
 });
-// console.log("pool 2", pool);
 
 pool.connect((err, client, release) => {
   if (err) {
