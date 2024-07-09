@@ -20,4 +20,9 @@ router.post(
   organisationController.createOrganisation
 );
 
+router.post(
+  "/api/organisations/:orgId/users",
+  organisationController.addUserToOrganisation
+);
+
 module.exports = router;

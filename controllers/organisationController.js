@@ -54,7 +54,7 @@ const createOrganisation = async (req, res) => {
     const organisation = await Organisation.createOrganisation({
       name,
       description,
-      creatorId: userId,
+      // creatorId: userId,
     });
 
     res.status(201).json({
@@ -70,8 +70,68 @@ const createOrganisation = async (req, res) => {
   }
 };
 
+const addUserToOrganisation = async (req, res) => {
+  const { orgId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    // Check if the organization exists
+    const orgQuery = `SELECT * FROM organisations WHERE orgId = $1;`;
+    const orgRes = await dbPool.query(orgQuery, [orgId]);
+    if (orgRes.rowCount === 0) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Organisation not found",
+      });
+    }
+
+    // Check if the user exists
+    const userQuery = `SELECT * FROM users WHERE userId = $1;`;
+    const userRes = await dbPool.query(userQuery, [userId]);
+    if (userRes.rowCount === 0) {
+      return res.status(404).json({
+        status: "fail",
+        message: "User not found",
+      });
+    }
+
+    // Check if the user is already part of the organization
+    const checkUserOrgQuery = `SELECT * FROM user_organisations WHERE userId = $1 AND orgId = $2;`;
+    const checkUserOrgRes = await dbPool.query(checkUserOrgQuery, [
+      userId,
+      orgId,
+    ]);
+    if (checkUserOrgRes.rowCount > 0) {
+      return res.status(400).json({
+        status: "fail",
+        message: "User is already part of the organisation",
+      });
+    }
+
+    // Add the user to the organisation
+    const insertQuery = `
+        INSERT INTO user_organisations (userId, orgId)
+        VALUES ($1, $2)
+        RETURNING *;
+      `;
+    await dbPool.query(insertQuery, [userId, orgId]);
+
+    res.status(200).json({
+      status: "success",
+      message: "User added to organisation successfully",
+    });
+  } catch (err) {
+    console.error("Error adding user to organisation:", err);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   getOrganisations,
   getOrganisation,
   createOrganisation,
+  addUserToOrganisation,
 };
