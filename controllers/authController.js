@@ -34,9 +34,11 @@ const register = async (req, res) => {
       creatorId: user.userId,
     });
 
-    const token = generateToken(user.userId, user.email); // Include email
-
-    // await Organisation.addUserToOrganisation(user.userId, organisation.orgId);
+    const token = generateToken(user.userId, user.email);
+    console.log(token);
+    console.log(user.userId);
+    console.log(organisation.orgId);
+    await Organisation.addUserToOrganisation(user.userId, organisation.orgId);
 
     res.status(201).json({
       status: "success",
