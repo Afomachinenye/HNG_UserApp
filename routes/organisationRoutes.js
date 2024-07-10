@@ -21,7 +21,7 @@ router.post(
 );
 
 router.post(
-  "/api/organisations/:orgId/users",
+  "/organisations/:orgId/users",
   organisationController.addUserToOrganisation
 );
 
