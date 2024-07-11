@@ -1,5 +1,5 @@
 const Organisation = require("../models/Organisation");
-const dbPool = require("./db");
+const dbPool = require("../db");
 
 const getOrganisations = async (req, res) => {
   const userId = req.user.userId;
