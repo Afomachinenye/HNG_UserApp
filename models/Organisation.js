@@ -28,11 +28,7 @@ const findOrganisationById = async (orgId) => {
   return result.rows;
 };
 
-addUserToOrganisation = async (userId, orgId) => {
-  // if (!userId || !orgId) {
-  //   throw new Error("userId and orgId are required");
-  // }
-
+const addUserToOrganisation = async (userId, orgId) => {
   const result = await dbPool.query(
     `INSERT INTO user_organisations (userId, orgId) VALUES ($1, $2) RETURNING *;`,
     [userId, orgId]
